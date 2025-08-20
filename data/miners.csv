@@ -1,0 +1,4 @@
+name, hashrate_ths, power_watts, pool_fee_pct, uptime_pct, release_date, launch_price_usd, notes
+Antminer S19J Pro 104T, 104, 3060, 0.02, 0.98, 2021-07, 9999, stock settings
+Antminer S19 XP 141T, 141, 3010, 0.02, 0.98, 2022-06, 11999, ~21.3 J/TH 
+Antminer S21 200T, 200, 3500, 0.02, 0.98, 2024-10, 2499, undervolt cap.
