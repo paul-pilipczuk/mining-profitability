@@ -1,0 +1,3 @@
+name,brand,hashrate_ths,power_watts,pool_fee_pct,uptime_pct
+Antminer S19j Pro 104T,antminer,104,3060,0.02,0.98
+Whatsminer M50S 126T,Whatsminer,126,3276,0.02,0.98
