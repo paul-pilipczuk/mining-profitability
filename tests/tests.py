@@ -3,19 +3,17 @@ from pathlib import Path
 import sys
 import datetime
 
-# Make `src/` importable so we can import mineval.py directly
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SRC_DIR = REPO_ROOT / "src"
 sys.path.insert(0, str(SRC_DIR))
 
-from mineval import (  # noqa: E402
+from mineval import (  
     read_miners,
-    read_history_ext,    # use the canonical function
+    read_history_ext,   
     latest_network_ehs,
     latest_btc_price,
     parse_float,
-    discount_daily_rate,
-    # keep read_history shim if you want: read_history,
+    discount_daily_rate
 )
 
 TEST_DIR = Path(__file__).parent
