@@ -2,12 +2,16 @@ import os
 import csv
 from pathlib import Path
 import datetime
-from typing import Dict, List, Optional
+from typing import Tuple, Dict, List, Optional
+import math
 
-try:
-    import requests
-except Exception:
-    requests = None
+# This is for future implementation to auto-run query for hashrate.csv
+# try:
+#     import requests
+# except Exception:
+#     requests = None
+
+
 
 # Constants & defaults for Bitcoin mining evaluation
 
@@ -224,9 +228,46 @@ def elec_cost_usd_day(power_watts: float, power_cost_usd_kwh: float, uptime: flo
     return kwh_day * power_cost_usd_kwh
 
 
-# monthly electricity cost using an average month length
 def elec_cost_usd_month(power_watts: float, power_cost_usd_kwh: float, uptime: float, days_in_month: float = 30.437) -> float:
     """
     Monthly electricity cost in USD. Uses 30.437 days (average month) by default.
     """
     return elec_cost_usd_day(power_watts, power_cost_usd_kwh, uptime) * max(0.0, days_in_month)
+
+
+# ---------- HALVING_AWARE SUBSIDY CALCS ----------
+
+def block_subsidy_from_height(height: int) -> float:
+    """
+    Return the block subsidy in BTC for a given block height.
+    Safeguards:
+      - height < 0 -> 0
+      - after 33 it is effectively 0
+    """
+    h = max(0, int(height))
+    halving = h // HALVING_INTERVAL
+    if halving >= 33:
+        return 0.0
+    return SUBSIDY_GENESIS_BTC / (2 ** halving)
+
+def block_subsidy_at_date(d: datetime.date, ref_date: datetime.date, ref_height: int, blocks_per_day:float) -> float:
+    """
+    Estimate the block subsidy at calendar date 'd' by projecting height from
+    a reference (ref_date, ref_height) using constant blocks_per_day.
+    """
+    delta_days = (d - ref_date).days
+    est_height = ref_height + int(round(delta_days * blocks_per_day))
+    if est_height < 0:
+        # prevents us from getting a negative height 
+        est_height = 0
+    return block_subsidy_from_height(est_height)
+
+# ---------- HASHRATE FORECASTING (NO DEPS) ----------
+
+def _fit_linear_without_numpy(xs: List[float], ys_log: List[float]) -> Tuple[float, float]:
+    #TODO: Fit y = a*x +b in least squares, no numpy
+    return False
+
+def forecast_hashrate_log(history: List[Tuple[datetime.date, float]], days_ahead: int) -> List[float]:
+    #TODO: Forecast network EH/s for t=1..days_ahead using a log-linear model
+    return False
